@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Quote Generator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .quote-container {
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .quote {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      .author {
+        font-style: italic;
+        color: #888;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="quote-container">
+      <div class="quote" id="quote">hello</div>
+      <div class="author" id="author"></div>
+    </div>
+    <script>
+      const quoteContainer = document.getElementById("quote");
+      const authorContainer = document.getElementById("author");
+
+      function fetchQuote() {
+        fetch("/learn-PHP/quotegen/api.php") // Corrected URL
+          .then((response) => response.json())
+          .then((data) => {
+            // Modify the page content and style using the data received
+            const quoteBody = document.querySelector(".quote-container");
+            console.log(data); // Log the fetched data to check its structure
+
+            // Set the background color using the color1, color2, and color3 fields
+            quoteBody.style.backgroundColor = `rgb(${data.color1}, ${data.color2}, ${data.color3})`; // Assuming RGB values
+            quoteContainer.textContent = data.quote; // Assuming the API returns the quote text
+            authorContainer.textContent = data.author; // Assuming the API returns the author of the quote
+          })
+          .catch((error) => {
+            console.error("Error fetching quote:", error);
+            // Handle error, e.g., display an error message
+          });
+      }
+
+      // Initial fetch and subsequent periodic fetches
+      fetchQuote();
+      setInterval(fetchQuote, 10000); // Fetch every 10 seconds
+    </script>
+  </body>
+</html>
